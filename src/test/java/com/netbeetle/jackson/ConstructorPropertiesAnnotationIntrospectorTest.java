@@ -7,13 +7,14 @@ import java.io.IOException;
 
 import lombok.Data;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
-import com.netbeetle.jackson.ConstructorPropertiesAnnotationIntrospector;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 
 public class ConstructorPropertiesAnnotationIntrospectorTest
 {
@@ -22,6 +23,20 @@ public class ConstructorPropertiesAnnotationIntrospectorTest
     {
         private final String name;
         private final int value;
+        
+//        @ConstructorProperties({"name", "value"})
+//        public ImmutablePojo(String name, int value) {
+//        	this.name = name;
+//        	this.value = value;
+//        }
+//        
+//        public String getName() {
+//			return name;
+//		}
+//        
+//        public int getValue() {
+//			return value;
+//		}
     }
 
     private final ImmutablePojo instance = new ImmutablePojo("foobar", 42);
@@ -40,8 +55,9 @@ public class ConstructorPropertiesAnnotationIntrospectorTest
         JsonMappingException, IOException
     {
         ObjectMapper mapper = new ObjectMapper();
-        DeserializationConfig config = mapper.getDeserializationConfig();
-        config.appendAnnotationIntrospector(new ConstructorPropertiesAnnotationIntrospector());
+        AnnotationIntrospector ai = AnnotationIntrospectorPair.create(new JacksonAnnotationIntrospector(), new ConstructorPropertiesAnnotationIntrospector());
+        mapper.setAnnotationIntrospector(ai);
+        
         String json = mapper.writeValueAsString(instance);
         ImmutablePojo output = mapper.readValue(json, ImmutablePojo.class);
         assertThat(output, equalTo(instance));
