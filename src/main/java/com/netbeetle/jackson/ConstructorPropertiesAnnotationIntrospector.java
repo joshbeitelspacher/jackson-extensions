@@ -51,14 +51,5 @@ public class ConstructorPropertiesAnnotationIntrospector extends NopAnnotationIn
 	public PropertyName findNameForDeserialization(Annotated a) {
 		return super.findNameForDeserialization(a);
 	}
-//    @Override
-//    public String findPropertyNameForParam(AnnotatedParameter param)
-//    {
-//        JsonProperty property = param.getAnnotation(JsonProperty.class);
-//        if (property == null)
-//        {
-//            return null;
-//        }
-//        return property.value();
-//    }
+
 }

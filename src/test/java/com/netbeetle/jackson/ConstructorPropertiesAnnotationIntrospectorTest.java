@@ -22,21 +22,7 @@ public class ConstructorPropertiesAnnotationIntrospectorTest
     private static class ImmutablePojo
     {
         private final String name;
-        private final int value;
-        
-//        @ConstructorProperties({"name", "value"})
-//        public ImmutablePojo(String name, int value) {
-//        	this.name = name;
-//        	this.value = value;
-//        }
-//        
-//        public String getName() {
-//			return name;
-//		}
-//        
-//        public int getValue() {
-//			return value;
-//		}
+        private final int value;        
     }
 
     private final ImmutablePojo instance = new ImmutablePojo("foobar", 42);
